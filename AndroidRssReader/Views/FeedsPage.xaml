@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AndroidRssReader.Views.FeedsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:AndroidRssReader.Models"
+    xmlns:vm="clr-namespace:AndroidRssReader.ViewModels"
+    x:DataType="vm:FeedsViewModel"
+    Title="Feeds">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="OnAddFeedClicked" Text="Add feed" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <VerticalStackLayout Grid.Row="0" Padding="16,10,16,8" Spacing="6">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                <Label
+                    Grid.Column="0"
+                    FontSize="13"
+                    Text="{Binding Summary}"
+                    TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                                Dark={StaticResource OnSurfaceVariantDark}}"
+                    VerticalOptions="Center" />
+                <Button
+                    Grid.Column="1"
+                    Padding="12,8"
+                    Clicked="OnImportOpmlClicked"
+                    FontSize="12"
+                    Style="{StaticResource OutlinedButton}"
+                    Text="Import OPML" />
+                <Button
+                    Grid.Column="2"
+                    Padding="12,8"
+                    Clicked="OnExportOpmlClicked"
+                    FontSize="12"
+                    IsEnabled="{Binding HasFeeds}"
+                    Style="{StaticResource OutlinedButton}"
+                    Text="Export OPML" />
+            </Grid>
+            <Label
+                FontSize="12"
+                IsVisible="{Binding HasStatus}"
+                LineBreakMode="WordWrap"
+                Text="{Binding StatusText}"
+                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                            Dark={StaticResource OnSurfaceVariantDark}}">
+                <Label.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsStatusError}"
+                        TargetType="Label"
+                        Value="True">
+                        <Setter Property="TextColor" Value="#E5534B" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+        </VerticalStackLayout>
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsSource="{Binding Feeds}">
+
+                <CollectionView.Header>
+                    <Grid Padding="16,4,16,10">
+                        <Border
+                            Padding="14,12"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerLowLight},
+                                                               Dark={StaticResource SurfaceContainerLowDark}}"
+                            StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnAllFeedsTapped" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <Image
+                                    Grid.Column="0"
+                                    WidthRequest="22"
+                                    HeightRequest="22"
+                                    Aspect="AspectFit"
+                                    Source="rss"
+                                    VerticalOptions="Center" />
+                                <VerticalStackLayout
+                                    Grid.Column="1"
+                                    Spacing="1"
+                                    VerticalOptions="Center">
+                                    <Label FontSize="15" Text="All feeds" />
+                                    <Label
+                                        FontSize="11"
+                                        Text="Everything in the subscription list"
+                                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                                                    Dark={StaticResource OnSurfaceVariantDark}}" />
+                                </VerticalStackLayout>
+                                <Border
+                                    Grid.Column="2"
+                                    Padding="8,2"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryLight},
+                                                                       Dark={StaticResource PrimaryDark}}"
+                                    IsVisible="{Binding HasUnread}"
+                                    MinimumWidthRequest="26"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Center">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Label
+                                        FontSize="11"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding TotalUnreadLabel}"
+                                        TextColor="{AppThemeBinding Light={StaticResource OnPrimaryLight},
+                                                                    Dark={StaticResource OnPrimaryDark}}" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Feed">
+                        <Grid Padding="16,4">
+                            <Border
+                                Padding="14,10"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerLowLight},
+                                                                   Dark={StaticResource SurfaceContainerLowDark}}"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer CommandParameter="{Binding .}" Tapped="OnFeedTapped" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
+                                    <Border
+                                        Grid.Column="0"
+                                        WidthRequest="36"
+                                        HeightRequest="36"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerHighLight},
+                                                                           Dark={StaticResource SurfaceContainerHighDark}}"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Label
+                                            FontSize="15"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding Initial}"
+                                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                                                        Dark={StaticResource OnSurfaceVariantDark}}"
+                                            VerticalTextAlignment="Center" />
+                                    </Border>
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="2"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontSize="15"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Text="{Binding Title}" />
+                                        <Label
+                                            FontSize="11"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Text="{Binding SubtitleLabel}"
+                                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                                                        Dark={StaticResource OnSurfaceVariantDark}}" />
+                                        <Label
+                                            FontSize="11"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Text="{Binding DetailLabel}"
+                                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                                                        Dark={StaticResource OnSurfaceVariantDark}}">
+                                            <Label.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding HasError}"
+                                                    TargetType="Label"
+                                                    Value="True">
+                                                    <Setter Property="TextColor" Value="#E5534B" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </VerticalStackLayout>
+                                    <Border
+                                        Grid.Column="2"
+                                        Padding="8,2"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryLight},
+                                                                           Dark={StaticResource PrimaryDark}}"
+                                        IsVisible="{Binding HasUnread}"
+                                        MinimumWidthRequest="26"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Label
+                                            FontSize="11"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding UnreadLabel}"
+                                            TextColor="{AppThemeBinding Light={StaticResource OnPrimaryLight},
+                                                                        Dark={StaticResource OnPrimaryDark}}" />
+                                    </Border>
+                                    <ImageButton
+                                        Grid.Column="3"
+                                        WidthRequest="36"
+                                        HeightRequest="36"
+                                        Aspect="AspectFit"
+                                        BackgroundColor="Transparent"
+                                        Clicked="OnFeedMoreClicked"
+                                        CommandParameter="{Binding .}"
+                                        Padding="8"
+                                        SemanticProperties.Description="Feed options"
+                                        Source="more_horiz"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32,48,32,32" Spacing="10">
+                        <Label
+                            FontFamily="Roboto-Medium"
+                            FontSize="18"
+                            HorizontalTextAlignment="Center"
+                            Text="No subscriptions yet" />
+                        <Label
+                            FontSize="13"
+                            HorizontalTextAlignment="Center"
+                            Text="Add a feed by its address, or import an OPML file exported from your current feed reader to start reading on the phone."
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight},
+                                                        Dark={StaticResource OnSurfaceVariantDark}}" />
+                        <Button
+                            Margin="0,10,0,0"
+                            Clicked="OnAddFeedClicked"
+                            HorizontalOptions="Center"
+                            Text="Add a feed" />
+                        <Button
+                            Clicked="OnImportOpmlClicked"
+                            HorizontalOptions="Center"
+                            Style="{StaticResource OutlinedButton}"
+                            Text="Import OPML file" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+
+        <!--  Bottom bar: jumps straight to the unread articles in the reader  -->
+        <Grid
+            Grid.Row="2"
+            RowDefinitions="1,Auto">
+            <BoxView
+                Grid.Row="0"
+                Color="{AppThemeBinding Light={StaticResource OutlineVariantLight},
+                                        Dark={StaticResource OutlineVariantDark}}"
+                Opacity="0.5" />
+            <Grid
+                Grid.Row="1"
+                Padding="16,10"
+                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerLowLight},
+                                                   Dark={StaticResource SurfaceContainerLowDark}}">
+                <Button
+                    Clicked="OnReadUnreadClicked"
+                    IsEnabled="{Binding HasUnread}"
+                    Text="{Binding ReadUnreadLabel}" />
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

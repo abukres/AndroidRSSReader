@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AndroidRssReader.Views.FeedAddressPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight},
+                                       Dark={StaticResource SurfaceDark}}"
+    Padding="24">
+
+    <!--
+        A page of the app instead of the prompt of the platform, so the address is a normal Entry:
+        it shows a caret, can be edited character by character and takes the clipboard.
+    -->
+    <VerticalStackLayout Spacing="16" VerticalOptions="Center">
+        <VerticalStackLayout Spacing="6">
+            <Label
+                x:Name="TitleLabel"
+                FontAttributes="Bold"
+                FontSize="20" />
+            <Label
+                x:Name="MessageLabel"
+                FontSize="13"
+                Style="{StaticResource SecondaryText}" />
+        </VerticalStackLayout>
+
+        <Entry x:Name="ValueEntry" ClearButtonVisibility="WhileEditing" />
+
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
+            <Button
+                Grid.Column="0"
+                Padding="12,8"
+                Clicked="OnPasteClicked"
+                FontSize="12"
+                Style="{StaticResource OutlinedButton}"
+                Text="Paste" />
+            <Button
+                Grid.Column="2"
+                Padding="12,8"
+                Clicked="OnCancelClicked"
+                FontSize="12"
+                Style="{StaticResource OutlinedButton}"
+                Text="Cancel" />
+            <Button
+                x:Name="AcceptButton"
+                Grid.Column="3"
+                Padding="12,8"
+                Clicked="OnAcceptClicked"
+                FontSize="12"
+                Text="Save" />
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

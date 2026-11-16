@@ -1,0 +1,13 @@
+# Normalize line endings in the repository, keep binaries untouched
+* text=auto
+
+*.cs text diff=csharp
+*.xaml text
+*.csproj text
+*.slnx text
+
+*.png binary
+*.jpg binary
+*.ttf binary
+*.apk binary
+*.aab binary

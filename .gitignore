@@ -1,0 +1,29 @@
+# Build output
+bin/
+obj/
+/packages/
+
+# IDE and editor state
+riderModule.iml
+/_ReSharper.Caches/
+.idea/
+.vs/
+.vscode/
+*.user
+*.suo
+*.DotSettings.user
+
+# Local AI assistant and tool configuration
+.junie/
+.mcp.json
+.playwright-mcp/
+
+# Signing material
+*.keystore
+*.jks
+*.p12
+keystore.properties
+
+# OS files
+.DS_Store
+Thumbs.db
