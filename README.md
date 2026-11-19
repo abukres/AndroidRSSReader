@@ -3,6 +3,7 @@
 [![.NET](https://img.shields.io/badge/.NET-11.0-512BD4)](https://dotnet.microsoft.com/)
 [![.NET MAUI](https://img.shields.io/badge/UI-.NET%20MAUI-6750A4)](https://learn.microsoft.com/dotnet/maui)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-3DDC84)](https://developer.android.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 A native Android reader for RSS and Atom feeds, written in C# with .NET 11 and .NET MAUI.
 
@@ -10,6 +11,10 @@ No account, no server, no tracking: subscriptions and articles live on the phone
 articles is on screen as soon as the app starts and stays readable without a connection. Feeds are
 imported from an OPML file (or added one by one by their address), which makes the app a drop-in
 replacement for whatever reader you are using today.
+
+- Repository: [github.com/abukres/AndroidRSSReader](https://github.com/abukres/AndroidRSSReader)
+- License: [MIT](LICENSE)
+- Platform: Android 7.0 (API 24) and newer
 
 | Reader | Feeds |
 |:---:|:---:|
@@ -78,6 +83,8 @@ replacement for whatever reader you are using today.
 ## Building
 
 ```powershell
+git clone https://github.com/abukres/AndroidRSSReader.git
+cd AndroidRSSReader
 dotnet restore
 dotnet build -c Debug -f net11.0-android
 dotnet build -c Release -f net11.0-android
